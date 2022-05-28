@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 )
+
+type logWriter struct {
+}
 
 func main() {
 	resp, err := http.Get("https://google.com")
@@ -15,10 +17,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	robots, err := io.ReadAll(resp.Body)
-	resp.Body.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s", robots)
+	lw := logWriter{}
+
+	io.Copy(lw, resp.Body)
+}
+
+func (logWriter) Write(bs []byte) (int, error) {
+	fmt.Println(string(bs))
+
+	fmt.Println("Just wrote this many bytes:", len(bs))
+
+	return len(bs), nil
 }
