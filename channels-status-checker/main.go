@@ -20,6 +20,10 @@ func main() {
 		go checkLink(link, channel)
 	}
 	fmt.Println(<-channel)
+	fmt.Println(<-channel)
+	fmt.Println(<-channel)
+	fmt.Println(<-channel)
+	fmt.Println(<-channel)
 }
 
 func checkLink(link string, channel chan string) {
